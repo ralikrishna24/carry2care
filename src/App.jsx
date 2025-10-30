@@ -113,194 +113,200 @@ export default function Carry2CareApp() {
   const safe = (row) => normalizeRow(row);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <header className="mb-10 text-center">
-          <h1 className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 drop-shadow-md tracking-wide">
+        <header className="mb-6 md:mb-10 text-center">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 drop-shadow-md tracking-wide">
             Carry2Care
           </h1>
-          <p className="mt-3 text-slate-600 text-lg font-medium">
+          <p className="mt-2 md:mt-3 text-slate-600 text-base md:text-lg font-medium">
             Nourishing Your Community — Smart Parcel Management System
           </p>
         </header>
 
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-blue-200">
-          <table className="w-full border-collapse text-sm">
-            <thead className="bg-gradient-to-r from-blue-700 to-cyan-500 text-white text-base">
-              <tr>
-                <th className="p-3">S.No</th>
-                <th className="p-3">Employee Name</th>
-                <th className="p-3">Contact Number</th>
-                <th className="p-3">Alternative Number</th>
-                <th className="p-3 bg-blue-50 text-blue-900">Breakfast</th>
-                <th className="p-3 bg-blue-100 text-blue-900">Pack / Price</th>
-                <th className="p-3 bg-cyan-50 text-cyan-900">Lunch</th>
-                <th className="p-3 bg-cyan-100 text-cyan-900">Pack / Price</th>
-                <th className="p-3">Total</th>
-                <th className="p-3">Actions</th>
-              </tr>
-            </thead>
+        {/* responsive table wrapper */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-blue-200 overflow-x-auto">
+          <div className="min-w-max">
+            <table className="w-full border-collapse text-sm">
+              <thead className="bg-gradient-to-r from-blue-700 to-cyan-500 text-white text-base">
+                <tr>
+                  <th className="p-3">S.No</th>
+                  <th className="p-3">Employee Name</th>
+                  <th className="p-3">Contact Number</th>
+                  <th className="p-3">Alternative Number</th>
+                  <th className="p-3 bg-blue-50 text-blue-900">Breakfast</th>
+                  <th className="p-3 bg-blue-100 text-blue-900">Pack / Price</th>
+                  <th className="p-3 bg-cyan-50 text-cyan-900">Lunch</th>
+                  <th className="p-3 bg-cyan-100 text-cyan-900">Pack / Price</th>
+                  <th className="p-3">Total</th>
+                  <th className="p-3">Actions</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {rows.map((rawRow, idx) => {
-                const row = safe(rawRow);
-                const b = breakfastMap[row.breakfast] || breakfastMap[""];
-                const l = lunchMap[row.lunch] || lunchMap[""];
-                return (
-                  <tr
-                    key={row.id}
-                    className={`${
-                      idx % 2 === 0 ? "bg-white" : "bg-blue-50"
-                    } hover:bg-cyan-100 transition`}
-                  >
-                    <td className="p-3 font-semibold text-slate-700">{idx + 1}</td>
-
-                    <td className="p-3">
-                      <input
-                        value={row.empName}
-                        onChange={(e) => validateAndSet(row.id, "empName", e.target.value)}
-                        placeholder="Employee name"
-                        className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
-                      />
-                      {row.errors && row.errors.empName ? (
-                        <p className="text-red-500 text-xs mt-1">{row.errors.empName}</p>
-                      ) : null}
-                    </td>
-
-                    <td className="p-3">
-                      <input
-                        value={row.contact}
-                        onChange={(e) => validateAndSet(row.id, "contact", e.target.value)}
-                        placeholder="Contact"
-                        className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
-                      />
-                      {row.errors && row.errors.contact ? (
-                        <p className="text-red-500 text-xs mt-1">{row.errors.contact}</p>
-                      ) : null}
-                    </td>
-
-                    <td className="p-3">
-                      <input
-                        value={row.altContact}
-                        onChange={(e) => validateAndSet(row.id, "altContact", e.target.value)}
-                        placeholder="Alternative"
-                        className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
-                      />
-                      {row.errors && row.errors.altContact ? (
-                        <p className="text-red-500 text-xs mt-1">{row.errors.altContact}</p>
-                      ) : null}
-                    </td>
-
-                    <td className="p-3 bg-blue-50">
-                      <select
-                        value={row.breakfast}
-                        onChange={(e) => setRowField(row.id, "breakfast", e.target.value)}
-                        className="w-full border border-blue-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
-                      >
-                        {BREAKFAST_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt || "-- select --"}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-
-                    <td className="p-3 bg-blue-100 text-blue-800">
-                      <div>{b.pack || "-"}</div>
-                      <div className="font-semibold">₹ {b.price ?? 0}</div>
-                    </td>
-
-                    <td className="p-3 bg-cyan-50">
-                      <select
-                        value={row.lunch}
-                        onChange={(e) => setRowField(row.id, "lunch", e.target.value)}
-                        className="w-full border border-cyan-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-cyan-400"
-                      >
-                        {LUNCH_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt || "-- select --"}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-
-                    <td className="p-3 bg-cyan-100 text-cyan-800">
-                      <div>{l.pack || "-"}</div>
-                      <div className="font-semibold">₹ {l.price ?? 0}</div>
-                    </td>
-
-                    <td className="p-3 font-bold text-green-700">₹ {totalForRow(row)}</td>
-                    <td className="p-3">
-                      <button
-                        onClick={() => removeRow(row.id)}
-                        className="text-red-600 hover:text-red-800 font-semibold"
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-
-          <div className="flex justify-between items-center p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-t border-blue-200">
-            <button
-              onClick={addRow}
-              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-5 py-2 rounded-full shadow-lg font-semibold"
-            >
-              + Add User
-            </button>
-
-            <button
-              onClick={() => {
-                const header = [
-                  "S.No",
-                  "Emp.Name",
-                  "Contact",
-                  "Alt Contact",
-                  "Breakfast",
-                  "Pack",
-                  "Price",
-                  "Lunch",
-                  "Pack",
-                  "Price",
-                  "Total",
-                ];
-                const csvLines = [header.join(",")];
-                rows.forEach((r, i) => {
-                  const row = normalizeRow(r);
+              <tbody>
+                {rows.map((rawRow, idx) => {
+                  const row = safe(rawRow);
                   const b = breakfastMap[row.breakfast] || breakfastMap[""];
                   const l = lunchMap[row.lunch] || lunchMap[""];
-                  csvLines.push(
-                    [
-                      i + 1,
-                      row.empName,
-                      row.contact,
-                      row.altContact,
-                      row.breakfast,
-                      b.pack || "-",
-                      b.price || 0,
-                      row.lunch,
-                      l.pack || "-",
-                      l.price || 0,
-                      totalForRow(row),
-                    ].join(",")
+                  return (
+                    <tr
+                      key={row.id}
+                      className={`${
+                        idx % 2 === 0 ? "bg-white" : "bg-blue-50"
+                      } hover:bg-cyan-100 transition`}
+                    >
+                      <td className="p-3 font-semibold text-slate-700">{idx + 1}</td>
+
+                      <td className="p-3 min-w-[150px]">
+                        <input
+                          value={row.empName}
+                          onChange={(e) => validateAndSet(row.id, "empName", e.target.value)}
+                          placeholder="Employee name"
+                          className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
+                        />
+                        {row.errors && row.errors.empName ? (
+                          <p className="text-red-500 text-xs mt-1">{row.errors.empName}</p>
+                        ) : null}
+                      </td>
+
+                      <td className="p-3 min-w-[130px]">
+                        <input
+                          value={row.contact}
+                          onChange={(e) => validateAndSet(row.id, "contact", e.target.value)}
+                          placeholder="Contact"
+                          className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
+                        />
+                        {row.errors && row.errors.contact ? (
+                          <p className="text-red-500 text-xs mt-1">{row.errors.contact}</p>
+                        ) : null}
+                      </td>
+
+                      <td className="p-3 min-w-[130px]">
+                        <input
+                          value={row.altContact}
+                          onChange={(e) => validateAndSet(row.id, "altContact", e.target.value)}
+                          placeholder="Alternative"
+                          className="w-full border border-slate-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
+                        />
+                        {row.errors && row.errors.altContact ? (
+                          <p className="text-red-500 text-xs mt-1">{row.errors.altContact}</p>
+                        ) : null}
+                      </td>
+
+                      <td className="p-3 bg-blue-50 min-w-[120px]">
+                        <select
+                          value={row.breakfast}
+                          onChange={(e) => setRowField(row.id, "breakfast", e.target.value)}
+                          className="w-full border border-blue-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-400"
+                        >
+                          {BREAKFAST_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt || "-- select --"}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+
+                      <td className="p-3 bg-blue-100 text-blue-800 min-w-[100px]">
+                        <div>{b.pack || "-"}</div>
+                        <div className="font-semibold">₹ {b.price ?? 0}</div>
+                      </td>
+
+                      <td className="p-3 bg-cyan-50 min-w-[120px]">
+                        <select
+                          value={row.lunch}
+                          onChange={(e) => setRowField(row.id, "lunch", e.target.value)}
+                          className="w-full border border-cyan-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-cyan-400"
+                        >
+                          {LUNCH_OPTIONS.map((opt) => (
+                            <option key={opt} value={opt}>
+                              {opt || "-- select --"}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+
+                      <td className="p-3 bg-cyan-100 text-cyan-800 min-w-[100px]">
+                        <div>{l.pack || "-"}</div>
+                        <div className="font-semibold">₹ {l.price ?? 0}</div>
+                      </td>
+
+                      <td className="p-3 font-bold text-green-700 min-w-[80px]">
+                        ₹ {totalForRow(row)}
+                      </td>
+                      <td className="p-3 min-w-[90px]">
+                        <button
+                          onClick={() => removeRow(row.id)}
+                          className="text-red-600 hover:text-red-800 font-semibold"
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
                   );
-                });
-                const blob = new Blob([csvLines.join("\n")], { type: "text/csv" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "Carry2Care_Report.csv";
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
-              className="bg-gradient-to-r from-green-500 to-lime-500 hover:from-green-600 hover:to-lime-600 text-white px-5 py-2 rounded-full shadow-lg font-semibold"
-            >
-              Export CSV
-            </button>
+                })}
+              </tbody>
+            </table>
           </div>
+        </div>
+
+        {/* buttons row */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0 p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border-t border-blue-200 mt-4 rounded-b-3xl">
+          <button
+            onClick={addRow}
+            className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-5 py-2 rounded-full shadow-lg font-semibold w-full md:w-auto"
+          >
+            + Add User
+          </button>
+
+          <button
+            onClick={() => {
+              const header = [
+                "S.No",
+                "Emp.Name",
+                "Contact",
+                "Alt Contact",
+                "Breakfast",
+                "Pack",
+                "Price",
+                "Lunch",
+                "Pack",
+                "Price",
+                "Total",
+              ];
+              const csvLines = [header.join(",")];
+              rows.forEach((r, i) => {
+                const row = normalizeRow(r);
+                const b = breakfastMap[row.breakfast] || breakfastMap[""];
+                const l = lunchMap[row.lunch] || lunchMap[""];
+                csvLines.push(
+                  [
+                    i + 1,
+                    row.empName,
+                    row.contact,
+                    row.altContact,
+                    row.breakfast,
+                    b.pack || "-",
+                    b.price || 0,
+                    row.lunch,
+                    l.pack || "-",
+                    l.price || 0,
+                    totalForRow(row),
+                  ].join(",")
+                );
+              });
+              const blob = new Blob([csvLines.join("\n")], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "Carry2Care_Report.csv";
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="bg-gradient-to-r from-green-500 to-lime-500 hover:from-green-600 hover:to-lime-600 text-white px-5 py-2 rounded-full shadow-lg font-semibold w-full md:w-auto"
+          >
+            Export CSV
+          </button>
         </div>
 
         <footer className="text-center mt-8 text-slate-600 text-sm font-medium">
